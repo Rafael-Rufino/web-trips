@@ -19,8 +19,8 @@ interface TripReservationProps {
 }
 interface TripReservationForm {
   guests: number;
-  startDate: Date;
-  endDate: Date;
+  startDate: Date | null;
+  endDate: Date | null;
 }
 
 const TripReservation = ({
