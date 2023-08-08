@@ -1,13 +1,18 @@
 "use client";
 
-import CountryFlag from "@/components/reactCountryFlag";
 import { Trip } from "@prisma/client";
-import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
+import CountryFlag from "@/components/reactCountryFlag";
+import Image from "next/image";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
+import Button from "@/components/button";
+
 const Confirmation = ({ params }: { params: { tripId: string } }) => {
   const [trip, setTrip] = useState<Trip | null>();
+  const [totalPrice, setTotalPrice] = useState<number>(0);
   const searchParams = useSearchParams();
 
   useEffect(() => {
@@ -20,13 +25,17 @@ const Confirmation = ({ params }: { params: { tripId: string } }) => {
           endDate: searchParams.get("endDate"),
         }),
       });
-      const { trip } = await response.json();
+      const { trip, totalPrice } = await response.json();
       setTrip(trip);
+      setTotalPrice(totalPrice);
     };
     fechTrip();
   }, [trip, params.tripId, searchParams]);
 
   if (!trip) return null;
+  const startDate = new Date(searchParams.get("startDate") as string);
+  const endDate = new Date(searchParams.get("endDate") as string);
+  const guests = Number(searchParams.get("guests"));
   return (
     <div className="container mx-auto p-5">
       <h1 className="font-semibold text-xl text-primaryDark">Sua viagem</h1>
@@ -50,6 +59,26 @@ const Confirmation = ({ params }: { params: { tripId: string } }) => {
         <h3 className="font-semibold text-lg text-primaryDark mt-3">
           Informações sobre o preço
         </h3>
+
+        <div className="flex justify-between">
+          <p className="font-medium text-primaryDark">Total:</p>
+          <p className="font-medium">R${totalPrice}</p>
+        </div>
+      </div>
+
+      <div className="flex flex-col mt-5 text-primaryDark">
+        <h3 className="font-semibold">Data</h3>
+        <div className="flex items-center gap-1 mt-1">
+          <p>{format(startDate, "dd 'de' MMMM", { locale: ptBR })}</p>
+          {"-"}
+          <p>{format(endDate, "dd 'de' MMMM", { locale: ptBR })}</p>
+        </div>
+
+        <h3 className="font-semibold mt-5">Hóspedes</h3>
+        <div className="flex items-center gap-1 mt-1">
+          <p>{guests} hóspedes</p>
+        </div>
+        <Button className="mt-5">Finalizar comprar</Button>
       </div>
     </div>
   );
