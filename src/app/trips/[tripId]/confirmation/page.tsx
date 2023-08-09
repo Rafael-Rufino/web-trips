@@ -7,17 +7,18 @@ import { useEffect, useState } from "react";
 import CountryFlag from "@/components/reactCountryFlag";
 import Image from "next/image";
 import { format } from "date-fns";
-import { ptBR, ro } from "date-fns/locale";
+import { ptBR } from "date-fns/locale";
 import Button from "@/components/button";
 import { useSession } from "next-auth/react";
+import { toast } from "react-toastify";
 
-const Confirmation = ({ params }: { params: { tripId: string } }) => {
+const TripConfirmation = ({ params }: { params: { tripId: string } }) => {
   const [trip, setTrip] = useState<Trip | null>();
   const [totalPrice, setTotalPrice] = useState<number>(0);
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  const { status } = useSession();
+  const { status, data } = useSession();
 
   useEffect(() => {
     const fechTrip = async () => {
@@ -48,9 +49,38 @@ const Confirmation = ({ params }: { params: { tripId: string } }) => {
   }, [status, searchParams, params, router]);
 
   if (!trip) return null;
+
+  const handleBuyClick = async () => {
+    const res = await fetch("http://localhost:3000/api/trips/reservation", {
+      method: "POST",
+      body: Buffer.from(
+        JSON.stringify({
+          tripId: params.tripId,
+          startDate: searchParams.get("startDate"),
+          endDate: searchParams.get("endDate"),
+          guests: Number(searchParams.get("guests")),
+          userId: (data?.user as any)?.id!,
+          totalPaid: totalPrice,
+        })
+      ),
+    });
+
+    if (!res.ok) {
+      return toast.error("Ocorreu um erro ao realizar a reserva", {
+        position: "top-center",
+      });
+    }
+
+    router.push("/");
+
+    toast.success("Reserva realizada com sucesso", {
+      position: "top-center",
+    });
+  };
   const startDate = new Date(searchParams.get("startDate") as string);
   const endDate = new Date(searchParams.get("endDate") as string);
   const guests = Number(searchParams.get("guests"));
+
   return (
     <div className="container mx-auto p-5">
       <h1 className="font-semibold text-xl text-primaryDark">Sua viagem</h1>
@@ -93,10 +123,12 @@ const Confirmation = ({ params }: { params: { tripId: string } }) => {
         <div className="flex items-center gap-1 mt-1">
           <p>{guests} hóspedes</p>
         </div>
-        <Button className="mt-5">Finalizar comprar</Button>
+        <Button onClick={handleBuyClick} className="mt-5">
+          Finalizar comprar
+        </Button>
       </div>
     </div>
   );
 };
 
-export default Confirmation;
+export default TripConfirmation;

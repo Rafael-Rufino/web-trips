@@ -81,7 +81,6 @@ const TripReservation = ({
         data.guests
       } `
     );
-    console.log({ res });
   };
   const startDate = watch("startDate");
   const endDate = watch("endDate");
