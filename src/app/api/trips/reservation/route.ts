@@ -29,6 +29,7 @@ export async function POST(request: Request) {
       userId,
       tripId,
       totalPaid,
+      // guests,
     },
   });
 
