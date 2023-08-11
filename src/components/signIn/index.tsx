@@ -2,6 +2,7 @@
 
 import { signIn, signOut, useSession } from "next-auth/react";
 import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
 import { AiOutlineMenu } from "react-icons/ai";
 
@@ -35,17 +36,28 @@ export function SignIn() {
             }`}
           />
           <div
-            className={`absolute top-16 right-0 bg-primaryLight rounded-md p-4 ${
+            className={`absolute z-20 top-16 right-0 bg-primaryLight rounded-md py-8 px-4  ${
               isMenuOpen ? "block" : "hidden"
             }`}
           >
             {status === "authenticated" && (
-              <button
-                className="text-primary text-sm font-semibold border-primary border-2 px-4 py-2 rounded-md hover:bg-primary hover:text-white"
-                onClick={handleLogoutClick}
-              >
-                Logout
-              </button>
+              <div className="flex flex-col justify-center w-[120px]">
+                <Link
+                  href="/my-trips"
+                  className="text-primary text-center text-sm font-semibold  py-2  rounded-md hover:opacity-80 "
+                >
+                  Minhas Viagem
+                </Link>
+
+                <div className="border-b border-lighterGray my-2 w-full" />
+
+                <button
+                  className="text-primary text-sm font-semibold py-2 rounded-md hover:opacity-80"
+                  onClick={handleLogoutClick}
+                >
+                  Logout
+                </button>
+              </div>
             )}
           </div>
           <Image

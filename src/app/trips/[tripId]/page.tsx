@@ -22,7 +22,7 @@ const TripDetails = async ({ params }: { params: { tripId: string } }) => {
   const trip = await getTripDetails(params.tripId);
 
   return (
-    <div className="container mx-auto mb-12 p-5">
+    <div className="container mx-auto mb-12 p-5  z-10">
       <h1 className="mb-6">Detalhes da viagem</h1>
       <TripHeader trip={trip!} />
       <TripReservation
