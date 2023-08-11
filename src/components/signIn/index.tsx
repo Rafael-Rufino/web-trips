@@ -20,6 +20,10 @@ export function SignIn() {
   const handleMenuClick = () => {
     setMenuOpen(!isMenuOpen);
   };
+
+  const handleMenuClose = () => {
+    setMenuOpen(false);
+  };
   return (
     <div>
       {status === "authenticated" && session?.user && (
@@ -43,6 +47,7 @@ export function SignIn() {
             {status === "authenticated" && (
               <div className="flex flex-col justify-center w-[120px]">
                 <Link
+                  onClick={handleMenuClose}
                   href="/my-trips"
                   className="text-primary text-center text-sm font-semibold  py-2  rounded-md hover:opacity-80 "
                 >
