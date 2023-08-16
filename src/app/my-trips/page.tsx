@@ -1,8 +1,8 @@
 "use client";
 
-import { Prisma, TripReservation } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 
-import { useEffect, useState, Fragment } from "react";
+import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
@@ -19,20 +19,20 @@ const MyTrips = () => {
 
   const router = useRouter();
 
+  const fetchReservations = async () => {
+    const response = await fetch(
+      `http://localhost:3000/api/user/${(data?.user as any)?.id}/reservations`
+    );
+
+    const responseData = await response.json();
+
+    setReservations(responseData);
+  };
+
   useEffect(() => {
-    if (status === "unauthenticated" || !data?.user) {
+    if (status === "unauthenticated") {
       return router.push("/");
     }
-
-    const fetchReservations = async () => {
-      const response = await fetch(
-        `http://localhost:3000/api/user/${(data?.user as any)?.id}/reservations`
-      );
-
-      const responseData = await response.json();
-
-      setReservations(responseData);
-    };
 
     fetchReservations();
   }, [status]);
