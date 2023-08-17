@@ -1,12 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { Prisma } from "@prisma/client";
+
 import ReactCountryFlag from "react-country-flag";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
-import Button from "@/components/button";
 import { toast } from "react-toastify";
+
+import Button from "@/components/button";
+import ConfirmationModal from "@/components/cofirmationModal";
 
 interface UserReservationItemProps {
   reservation: Prisma.TripReservationGetPayload<{
@@ -19,6 +22,7 @@ const UserReservationItem = ({
   reservation,
   fetchReservations,
 }: UserReservationItemProps) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const { trip } = reservation;
 
   const handleDeleteClick = async () => {
@@ -38,11 +42,14 @@ const UserReservationItem = ({
     });
 
     fetchReservations();
+    setIsModalOpen(false);
   };
 
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
   return (
     <div>
-      {/* CARD */}
       <div className="flex flex-col p-5 mt-5 border-grayLighter border-solid border shadow-lg rounded-lg">
         <div className="flex items-center gap-3 pb-5 border-b border-grayLighter border-solid">
           <div className="relative h-[106px] w-[124px]">
@@ -97,8 +104,17 @@ const UserReservationItem = ({
               R${Number(reservation.totalPaid)}
             </p>
           </div>
-
-          <Button variant="danger" className="mt-5" onClick={handleDeleteClick}>
+          <ConfirmationModal
+            titleModal="Deseja realmente excluir essa viagem?"
+            handleDelete={handleDeleteClick}
+            open={isModalOpen}
+            setOpen={setIsModalOpen}
+            confirmText="Sim"
+            cancelText="Não"
+            confirmationFeedback="Cancelado"
+            confirmationLoading
+          />
+          <Button variant="danger" className="mt-5" onClick={handleOpenModal}>
             Cancelar
           </Button>
         </div>
