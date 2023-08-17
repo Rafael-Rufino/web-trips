@@ -9,7 +9,7 @@ export async function DELETE(
     return {
       status: 400,
       body: {
-        message: "Missing userId",
+        message: "Missing reservationId",
       },
     };
   }
