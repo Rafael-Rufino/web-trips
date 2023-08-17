@@ -52,8 +52,9 @@ export async function POST(request: Request) {
       },
     },
   });
+  const hasReservation = reservation.length > 0;
 
-  if (reservation.length > 0) {
+  if (hasReservation) {
     return new NextResponse(
       JSON.stringify({
         error: {
