@@ -1,14 +1,17 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import { signIn, signOut, useSession } from "next-auth/react";
+
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+
 import { AiOutlineMenu } from "react-icons/ai";
 
 export function SignIn() {
   const { status, data: session } = useSession();
-  const [isMenuOpen, setMenuOpen] = useState(false);
+  const [isMenuIsOpen, setMenuIsOpen] = useState(false);
+  const menuRef = useRef(null);
 
   const handleLoginClick = () => {
     signIn();
@@ -18,30 +21,47 @@ export function SignIn() {
   };
 
   const handleMenuClick = () => {
-    setMenuOpen(!isMenuOpen);
+    setMenuIsOpen(!isMenuIsOpen);
   };
 
   const handleMenuClose = () => {
-    setMenuOpen(false);
+    setMenuIsOpen(false);
   };
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setMenuIsOpen(false);
+      }
+    }
+
+    if (isMenuIsOpen) {
+      document.addEventListener("click", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, [isMenuIsOpen]);
   return (
     <div>
       {status === "authenticated" && session?.user && (
         <div
+          ref={menuRef}
           className={`flex justify-center items-center gap-4 ${
-            isMenuOpen ? "border-primary" : "border-lighterGray"
+            isMenuIsOpen ? "border-primary" : "border-lighterGray"
           } border-2 px-4 py-2 rounded-[40px] relative cursor-pointer hover:border-primary hover:shadow-md transition-all ease-in-out duration-300 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 focus:ring-offset-2 focus:ring-offset-primaryGray focus:ring-offset-opacity-50 focus:ring-offset-soli]`}
         >
           <AiOutlineMenu
             size={24}
             onClick={handleMenuClick}
             className={`cursor-pointer hover:text-primary ${
-              isMenuOpen ? "text-primary" : "text-gray-500"
+              isMenuIsOpen ? "text-primary" : "text-gray-500"
             }`}
           />
           <div
             className={`absolute z-20 top-16 right-0 bg-primaryLight rounded-md py-8 px-4  ${
-              isMenuOpen ? "block" : "hidden"
+              isMenuIsOpen ? "block" : "hidden"
             }`}
           >
             {status === "authenticated" && (
