@@ -52,7 +52,7 @@ const MyTrips = () => {
             <UserReservationCard
               key={reservation.id}
               reservation={reservation}
-              fetchReservations={() => ({})}
+              fetchReservations={fetchReservations}
             />
           ))
         ) : (
@@ -61,7 +61,7 @@ const MyTrips = () => {
               Você ainda não possui nenhuma viagem
             </p>
 
-            <Link href="/my-trips">
+            <Link href="/">
               <Button className="w-full mt-2">Fazer reserva</Button>
             </Link>
           </div>
