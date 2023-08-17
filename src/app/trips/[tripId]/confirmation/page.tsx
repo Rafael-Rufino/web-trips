@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import CountryFlag from "@/components/reactCountryFlag";
 import Image from "next/image";
 import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
+import ptBR from "date-fns/locale/pt-BR";
 import Button from "@/components/button";
 import { useSession } from "next-auth/react";
 import { toast } from "react-toastify";
@@ -115,7 +115,7 @@ const TripConfirmation = ({ params }: { params: { tripId: string } }) => {
         <h3 className="font-semibold">Data</h3>
         <div className="flex items-center gap-1 mt-1">
           <p>{format(startDate, "dd 'de' MMMM", { locale: ptBR })}</p>
-          {"-"}
+          {" - "}
           <p>{format(endDate, "dd 'de' MMMM", { locale: ptBR })}</p>
         </div>
 

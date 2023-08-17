@@ -25,12 +25,11 @@ interface TripReservationForm {
 
 const TripReservation = ({
   tripId,
-  tripEndDate,
   tripStartDate,
+  tripEndDate,
   maxGuests,
   pricePerDay,
 }: TripReservationProps) => {
-  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -40,14 +39,16 @@ const TripReservation = ({
     setError,
   } = useForm<TripReservationForm>();
 
+  const router = useRouter();
+
   const onSubmit = async (data: TripReservationForm) => {
     const response = await fetch("http://localhost:3000/api/trips/check", {
       method: "POST",
       body: Buffer.from(
         JSON.stringify({
-          tripId,
           startDate: data.startDate,
           endDate: data.endDate,
+          tripId,
         })
       ),
     });
@@ -90,13 +91,13 @@ const TripReservation = ({
       <div className="flex  gap-4 w-full">
         <Controller
           name="startDate"
-          control={control}
           rules={{
             required: {
               value: true,
               message: "Data de início é obrigatória",
             },
           }}
+          control={control}
           render={({ field }) => (
             <DatePicker
               placeholderText="Data de Inicio"
@@ -111,13 +112,13 @@ const TripReservation = ({
         />
         <Controller
           name="endDate"
-          control={control}
           rules={{
             required: {
               value: true,
               message: "Data final é obrigatória",
             },
           }}
+          control={control}
           render={({ field }) => (
             <DatePicker
               placeholderText="Data final"
