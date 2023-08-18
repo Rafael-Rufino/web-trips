@@ -9,7 +9,7 @@ interface searchProps {
 
 const searchIcon = ({ icon, text }: searchProps) => {
   return (
-    <div className="flex flex-col items-center gap-1">
+    <div className="flex flex-col items-center gap-1 hover:opacity-80 transition-opacity">
       <Image src={icon} width={25} height={25} alt={`icone do ${text}`} />
       <p className="text-sm text-primaryGray">{text}</p>
     </div>
