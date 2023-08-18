@@ -46,7 +46,7 @@ const MyTrips = () => {
       <h1 className=" font-semibold text-primaryDark text-xl">
         Minhas Viagens
       </h1>
-      <div className=" flex flex-col w-full h-full min-h-[500px] justify-center">
+      <div className=" flex flex-col w-full h-full min-h-[400px] justify-center">
         {hasReservations ? (
           reservations?.map((reservation) => (
             <UserReservationCard

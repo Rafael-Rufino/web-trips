@@ -7,7 +7,7 @@ import DatePicker from "@/components/datePicker";
 import Input from "@/components/input";
 
 import { Controller, useForm } from "react-hook-form";
-import { differenceInDays, set } from "date-fns";
+import { differenceInDays } from "date-fns";
 import { useRouter } from "next/navigation";
 
 interface TripReservationProps {
